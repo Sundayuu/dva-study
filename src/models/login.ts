@@ -1,5 +1,5 @@
 export default {
-  namespace: 'count',
+  namespace: 'syetemLogin',
 
   state: {
     record: 0,
@@ -16,10 +16,11 @@ export default {
     // effects 是一个generator函数
     // call:执行异步函数
     // put: 发出action,类似于dispatch
-    *fetch({ payload }: any, { call, put }: any) {
-      // eslint-disable-line
-      yield put({ type: 'add' });
-    }
+    // *fetch({ payload }: any, { call, put }: any) {
+    //   // eslint-disable-line
+    //   yield put({ type: 'add' });
+    // }
+    *dologin({ payload }, { call, put }) {}
   },
 
   reducers: {

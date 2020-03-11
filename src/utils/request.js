@@ -1,5 +1,13 @@
 import fetch from 'dva/fetch';
-
+//https://mingdi.yvanwang.com/api/
+const defaultOptionsDev = {
+  mode: 'cors',
+  credentials: 'include',
+  headers: {
+    'content-type': 'application/json'
+  }
+};
+const httpServer = 'https://mingdi.yvanwang.com/api';
 function parseJSON(response) {
   return response.json();
 }
@@ -22,7 +30,7 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, options) {
-  return fetch(url, options)
+  return fetch(`${httpServer}+ ${url}`, { ...options, ...defaultOptionsDev })
     .then(checkStatus)
     .then(parseJSON)
     .then(data => ({ data }))
