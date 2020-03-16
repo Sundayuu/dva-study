@@ -2,6 +2,9 @@
   "private": true,
   "scripts": {
     "start": "roadhog server",
+    "start:mock": " cross-env API_URl=pre roadhog server",
+    "start:dev": " cross-env API_URl=dev roadhog server",
+    "start:pre": " cross-env API_URl=pre roadhog server",
     "build": "roadhog build",
     "lint": "eslint --ext .js src test",
     "precommit": "npm run lint"
@@ -9,6 +12,7 @@
   "dependencies": {
     "antd": "^4.0.2",
     "babel-plugin-import": "^1.13.0",
+    "cross-env": "^7.0.2",
     "dva": "^2.4.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

@@ -1,6 +1,5 @@
 import dva from 'dva';
 import './index.css';
-import model from './models/example';
 import router from './router';
 // history路由
 
@@ -14,7 +13,9 @@ const app = dva({
 app.use({});
 
 // 3. Model
-app.model(model);
+// app.model(example);
+// app.model(loginModel);
+require('./models').default.forEach(model => app.model(model.default));
 
 // 4. Router
 app.router(router);

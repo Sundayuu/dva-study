@@ -1,9 +1,16 @@
+import * as require from './../services/login';
+// type IState = {
+//   record: number;
+//   current: number;
+//   username: string | number;
+// };
 export default {
   namespace: 'syetemLogin',
 
   state: {
     record: 0,
-    current: 0
+    current: 0,
+    username: ''
   },
 
   subscriptions: {
@@ -20,23 +27,25 @@ export default {
     //   // eslint-disable-line
     //   yield put({ type: 'add' });
     // }
-    *dologin({ payload }, { call, put }) {}
+    *dologin({ payload }, { call, put }) {
+      // 将接口需要的参数从payload 解构
+      let { userData } = payload;
+
+      const { data } = yield call(require.login, userData) as any;
+      let userInfo = data.userInfo;
+      if (data && data.success) {
+      }
+      yield put({
+        type: 'loginSuccess',
+        payload: userInfo
+      });
+    }
   },
 
   reducers: {
-    add(state) {
-      const newCurrent = state.current + 1;
-      return {
-        ...state,
-        record: newCurrent > state.record ? newCurrent : state.record,
-        current: newCurrent
-      };
-    },
-    minus(state) {
-      return {
-        ...state,
-        current: state.current - 1
-      };
+    loginSuccess(state, action) {
+      let userInfo = action.payload;
+      return { ...state, ...userInfo };
     }
   }
 };

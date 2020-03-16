@@ -2,12 +2,20 @@ import React from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button } from 'antd';
 import * as styles from './index.less';
-type IProps = ({ history: any }) => JSX.Element;
 
-const Login: IProps = ({ history }) => {
+// type IProps = ({ history: any, syetemLogin, dispatch }) => JSX.Element;
+
+const Login = ({ history, dispatch }) => {
   const onFinish = values => {
-    console.log('Success:', values);
-    history.push('/home');
+    console.log('Success:', values, dispatch);
+    // history.push('/home');
+
+    dispatch({
+      type: 'syetemLogin/doLogin',
+      payload: {
+        userData: values
+      }
+    });
   };
 
   const onFinishFailed = errorInfo => {
