@@ -14,7 +14,11 @@ const { SubMenu } = Menu;
 type IState = {
   collapsed: boolean;
 };
-class Home extends React.Component<IState, any> {
+type IProps = {
+  menuList: Array<any>;
+  dispatch;
+};
+class Home extends React.Component<IProps, IState> {
   state = {
     collapsed: false
   };
@@ -22,8 +26,29 @@ class Home extends React.Component<IState, any> {
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
+  componentDidMount() {
+    // new Promise((resolve,reject)=>{
+    //   this.props.dispatch({
+    //     type: 'home/fetchMenu',
+    //     payload: {
+    //       resolve,
+    //       reject
+    //     }
+    //   });
+    // }).then(res=>{
+    //   console.log(res);
+
+    // })
+    this.props.dispatch({
+      type: 'home/fetchMenu'
+    });
+  }
 
   render() {
+    console.log(this.props);
+
+    const { menuList } = this.props;
+
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sider
@@ -32,43 +57,28 @@ class Home extends React.Component<IState, any> {
           onCollapse={this.onCollapse}
         >
           <div className={styles.logo}>指甲盖</div>
+
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1">
-              <PieChartOutlined />
-              <span>Option 1</span>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <DesktopOutlined />
-              <span>Option 2</span>
-            </Menu.Item>
-            <SubMenu
-              key="sub1"
-              title={
-                <span>
-                  <UserOutlined />
-                  <span>User</span>
-                </span>
-              }
-            >
-              <Menu.Item key="3">Tom</Menu.Item>
-              <Menu.Item key="4">Bill</Menu.Item>
-              <Menu.Item key="5">Alex</Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="sub2"
-              title={
-                <span>
-                  <TeamOutlined />
-                  <span>Team</span>
-                </span>
-              }
-            >
-              <Menu.Item key="6">Team 1</Menu.Item>
-              <Menu.Item key="8">Team 2</Menu.Item>
-            </SubMenu>
-            <Menu.Item key="9">
-              <FileOutlined />
-            </Menu.Item>
+            {menuList &&
+              menuList.map(item => {
+                if (item.children && item.children.length > 0) {
+                  return (
+                    <SubMenu key={item.id} title={item.menuName}>
+                      {item.children.map(item => {
+                        return (
+                          <Menu.Item key={item.id}>{item.menuName}</Menu.Item>
+                        );
+                      })}
+                    </SubMenu>
+                  );
+                } else {
+                  return (
+                    <Menu.Item key={item.id}>
+                      <span>{item.menuName}</span>
+                    </Menu.Item>
+                  );
+                }
+              })}
           </Menu>
         </Sider>
         <Layout className="site-layout">
@@ -93,4 +103,9 @@ class Home extends React.Component<IState, any> {
     );
   }
 }
-export default connect()(Home);
+const mapStateToProps = state => {
+  return {
+    menuList: state.home.menuList
+  };
+};
+export default connect(mapStateToProps)(Home);

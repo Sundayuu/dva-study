@@ -2,7 +2,7 @@ function getBaseUrl() {
   // dev
   let HttpServer: string = '';
   if (process.env.API_URl === 'dev') {
-    HttpServer = 'http://localhost:8000';
+    HttpServer = '/api';
   } else if (process.env.API_URl === 'mock') {
     HttpServer = 'http://localhost:8000';
   } else if (process.env.API_URl === 'pre') {

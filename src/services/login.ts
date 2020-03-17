@@ -1,8 +1,7 @@
 import request from '../utils/request';
 
 export const login = async params => {
-  console.log(params);
-  return request('/system/login', {
+  return request('/api/login', {
     method: 'POST',
     body: JSON.stringify(params)
   });

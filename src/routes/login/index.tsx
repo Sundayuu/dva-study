@@ -1,26 +1,35 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button } from 'antd';
+
+import { Form, Input, Button, message } from 'antd';
 import * as styles from './index.less';
 
 // type IProps = ({ history: any, syetemLogin, dispatch }) => JSX.Element;
 
 const Login = ({ history, dispatch }) => {
   const onFinish = values => {
-    console.log('Success:', values, dispatch);
-    // history.push('/home');
-
-    dispatch({
-      type: 'syetemLogin/doLogin',
-      payload: {
-        userData: values
+    // 使用promise 调用
+    new Promise(function(resolve, reject) {
+      dispatch({
+        type: 'syetemLogin/dologin',
+        payload: {
+          userData: values,
+          resolve,
+          reject
+        }
+      });
+    }).then(
+      () => {
+        message.success('登录成功');
+        history.push('/home');
+      },
+      () => {
+        message.error('用户名或密码错误');
       }
-    });
+    );
   };
 
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  };
+  const onFinishFailed = errorInfo => {};
 
   return (
     <div className={styles.loginBox}>

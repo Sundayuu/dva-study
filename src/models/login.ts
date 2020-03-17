@@ -1,16 +1,12 @@
 import * as require from './../services/login';
-// type IState = {
-//   record: number;
-//   current: number;
-//   username: string | number;
-// };
 export default {
   namespace: 'syetemLogin',
 
   state: {
     record: 0,
     current: 0,
-    username: ''
+    username: '',
+    token: ''
   },
 
   subscriptions: {
@@ -29,16 +25,22 @@ export default {
     // }
     *dologin({ payload }, { call, put }) {
       // 将接口需要的参数从payload 解构
-      let { userData } = payload;
+      let { userData, resolve, reject } = payload;
 
       const { data } = yield call(require.login, userData) as any;
-      let userInfo = data.userInfo;
-      if (data && data.success) {
+      const { code, context } = data;
+
+      if (code == 'k-100') {
+        // 登录成功
+        yield sessionStorage.setItem('userToken', JSON.stringify(data));
+        yield put({
+          type: 'loginSuccess',
+          payload: context
+        });
+        resolve();
+      } else {
+        reject(context);
       }
-      yield put({
-        type: 'loginSuccess',
-        payload: userInfo
-      });
     }
   },
 
